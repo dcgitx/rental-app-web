@@ -1,14 +1,23 @@
     <script setup>
     import { storeToRefs } from 'pinia'
     import { GlobeAltIcon } from "@heroicons/vue/24/outline";
+    import { useAuthStore } from '@/stores/auth'
 
     import AppLogo from "@/components/AppLogo.vue";
     import FacebookLogo from "@/components/FacebookLogo.vue";
     import InstagramLogo from "@/components/InstagramLogo.vue";
     import { useLocaleStore } from "@/stores/localeStore";
+    import Dropdown from './Dropdown.vue';
+    import DropdownLink from './DropdownLink.vue';
+    import { useRouter } from 'vue-router';
 
-    // TEMP auth
-    const isLoggedIn = false;
+    const auth = useAuthStore()
+    const router = useRouter()
+
+    const logout = async () => {
+        await auth.logout()
+        router.push({ name: 'home' })
+    }
 
     // TEMP: Hardcoded socials
     const socials = [
@@ -58,7 +67,7 @@
             <div class="flex flex-col items-center justify-center gap-4 sm:pt-6">
 
                 <!-- Guest Navigation -->
-                <div v-if="!isLoggedIn" class="flex w-full flex-col items-center justify-center text-black">
+                <div v-if="!auth.isAuthenticated" class="flex w-full flex-col items-center justify-center text-black">
                     <div>
                         <router-link to="/login"
                             class="rounded-md py-2 text-2xl font-medium tracking-normal hover:text-gray-800 transition">
@@ -72,9 +81,46 @@
                     </div>
                 </div>
 
+                <!-- Settings Dropdown -->
+                <div v-else class="flex w-full flex-row items-center justify-center">
+                    <Dropdown align="right" width="48">
+                        <template #trigger>
+                            <span class="inline-flex rounded-md">
+                                <button type="button"
+                                    class="inline-flex items-center justify-end rounded-md text-right text-xl font-medium leading-4 text-black transition duration-200 ease-in-out">
+                                    {{ auth.user.name }}
+
+                                    <svg class="-me-0.5 ms-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </span>
+                        </template>
+
+                        <template #content class="z-50">
+                            <DropdownLink to="{ name: 'profile.edit' }">
+                                {{ $t("Profile") }}
+                            </DropdownLink>
+                            <DropdownLink to="{ name: 'addresses.index' }">
+                                {{ "My Addresses" }}
+                            </DropdownLink>
+                            <DropdownLink @click="logout">{{ $t("Log Out") }}
+                            </DropdownLink>
+                            <div v-if="auth.user.is_admin">
+                                <a href="/dashboard"
+                                    class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                    target="_blank" method="get" as="button">{{ $t("Admin") }}</a>
+                            </div>
+                        </template>
+                    </Dropdown>
+                </div>
+
                 <!-- Locale Selector -->
                 <div class="flex flex-row justify-center">
-                    <div class="flex flex-row mt-2 gap-4 items-center rounded-full px-2">
+                    <div class="flex flex-row items-center justify-center rounded-full">
                         <GlobeAltIcon class="-mr-2 mt-0.5 size-6 text-gray-700" />
                         <select @change="localeSelected($event)" v-model="locale"
                             class="focus-ring-0 border-0 bg-transparent text-lg font-semibold uppercase text-black hover:cursor-pointer focus:border-0 focus:outline-none focus:ring-0">

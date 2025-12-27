@@ -9,6 +9,7 @@ import CategoryCard from "@/components/CategoryCard.vue";
 import HomePageCard from "@/components/HomePageCard.vue";
 import ItemSearchBar from "@/components/ItemSearchBar.vue";
 import RecentItemsSwiper from "@/components/RecentItemsSwiper.vue";
+import api from '@/lib/api'
 
 const {
   categories,
@@ -24,9 +25,11 @@ const {
   load: loadRecentItems,
 } = useRecentItems()
 
+//await api.get('/sanctum/csrf-cookie');
 onMounted(() => {
   loadCategories()
   loadRecentItems()
+  //api.get('/sanctum/csrf-cookie');
 })
 
 // TEMP: no auth yet

@@ -21,6 +21,7 @@ if (!localStorage.getItem('locale')) {
 }
 
 const app = createApp(App)
+
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
