@@ -10,9 +10,12 @@
     import Dropdown from './Dropdown.vue';
     import DropdownLink from './DropdownLink.vue';
     import { useRouter } from 'vue-router';
+    import UserNav from './UserNav.vue';
 
     const auth = useAuthStore()
     const router = useRouter()
+
+    console.log(auth.isAuthenticated);
 
     const logout = async () => {
         await auth.logout()
@@ -81,8 +84,8 @@
                     </div>
                 </div>
 
-                <!-- Settings Dropdown -->
-                <div v-else class="flex w-full flex-row items-center justify-center">
+                <!-- User Options -->
+                <div v-else class="flex w-full flex-row items-center gap-4 justify-center divide-x-2 divide-gray-600">
                     <Dropdown align="right" width="48">
                         <template #trigger>
                             <span class="inline-flex rounded-md">
@@ -116,10 +119,26 @@
                             </div>
                         </template>
                     </Dropdown>
+                    <!-- Locale Selector -->
+                    <div class="flex flex-row justify-center pl-4">
+                        <div class="flex flex-row items-center justify-center rounded-full">
+                            <GlobeAltIcon class="-mr-2 mt-0.5 size-6 text-gray-700" />
+                            <select @change="localeSelected($event)" v-model="locale"
+                                class="focus-ring-0 border-0 bg-transparent text-lg font-semibold uppercase text-black hover:cursor-pointer focus:border-0 focus:outline-none focus:ring-0">
+                                <option v-for="loc in available" :key="loc" :value="loc" :disabled="loc === locale"
+                                    class="uppercase" :class="{
+                                        'text-gray-300':
+                                            loc === locale,
+                                    }">
+                                    {{ loc }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Locale Selector -->
-                <div class="flex flex-row justify-center">
+                <!-- Guest Locale Selector -->
+                <div v-if="!auth.isAuthenticated" class="flex flex-row justify-center">
                     <div class="flex flex-row items-center justify-center rounded-full">
                         <GlobeAltIcon class="-mr-2 mt-0.5 size-6 text-gray-700" />
                         <select @change="localeSelected($event)" v-model="locale"
@@ -138,5 +157,6 @@
             </div>
         </nav>
     </header>
+    <UserNav v-if="auth.isAuthenticated" />
 </template>
 

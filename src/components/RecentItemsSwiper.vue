@@ -32,7 +32,7 @@ const modules = [Autoplay, Navigation];
         <SwiperSlide v-for="item in items" :key="item.id" class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl
              hover:shadow-lg hover:border-teal-400 dark:hover:border-teal-500
              transition-all duration-300 bg-white dark:bg-gray-800">
-            <RouterLink :to="`/items/${item.id}`" class="flex flex-col items-center h-full">
+            <RouterLink :to="`/items/${item.slug}`" class="flex flex-col items-center h-full">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3
                  text-center line-clamp-2 h-10">
                     {{ item.title }}

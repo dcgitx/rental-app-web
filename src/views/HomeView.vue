@@ -10,6 +10,9 @@ import HomePageCard from "@/components/HomePageCard.vue";
 import ItemSearchBar from "@/components/ItemSearchBar.vue";
 import RecentItemsSwiper from "@/components/RecentItemsSwiper.vue";
 import api from '@/lib/api'
+import { useAuthStore } from "@/stores/auth";
+
+const auth = useAuthStore()
 
 const {
   categories,
@@ -25,15 +28,11 @@ const {
   load: loadRecentItems,
 } = useRecentItems()
 
-//await api.get('/sanctum/csrf-cookie');
 onMounted(() => {
   loadCategories()
   loadRecentItems()
-  //api.get('/sanctum/csrf-cookie');
 })
 
-// TEMP: no auth yet
-const isLoggedIn = false;
 </script>
 
 <template>
@@ -43,8 +42,8 @@ const isLoggedIn = false;
     <div class="max-w-7xl mx-auto text-center">
       <!-- Main Headline -->
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-        Why buy when you can rent
-        <span class="animate-blink text-teal-600" style="animation-delay: 0.5s">.</span>
+        {{ $t("Why buy when you can rent") }}<span class="animate-blink text-teal-600"
+          style="animation-delay: 0.5s">.</span>
         <span class="animate-blink text-teal-600" style="animation-delay: 0.75s">.</span>
         <span class="animate-blink text-teal-600" style="animation-delay: 1s">.</span>
       </h1>
@@ -199,7 +198,7 @@ const isLoggedIn = false;
   </section>
 
   <!-- CTA Section -->
-  <section v-if="!isLoggedIn"
+  <section v-if="!auth.isAuthenticated"
     class="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-700 dark:to-teal-800">
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-3xl sm:text-5xl font-bold text-white mb-6">

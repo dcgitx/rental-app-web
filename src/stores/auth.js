@@ -3,7 +3,7 @@ import api from '@/lib/api'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: JSON.parse(sessionStorage.getItem('auth:user')),
+    user: null,
     loaded: false,
   }),
 
@@ -16,21 +16,18 @@ export const useAuthStore = defineStore('auth', {
       try {
         const { data } = await api.get('/auth-check')
         this.user = data
-        sessionStorage.setItem('auth:user', JSON.stringify(data))
       } catch {
         this.user = null
-        sessionStorage.removeItem('auth:user')
+        localStorage.removeItem('token')
       } finally {
         this.loaded = true
       }
     },
 
-    async logout() {
-      await api.post('/logout')
-
+    logout() {
       this.user = null
       this.loaded = true
-      sessionStorage.removeItem('auth:user')
+      localStorage.removeItem('token')
     },
   },
 })

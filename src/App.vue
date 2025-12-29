@@ -8,18 +8,23 @@ import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 
-onMounted(() => {
+/*onMounted(() => {
   auth.fetchUser()
+})*/
+
+onMounted(() => {
+  if (localStorage.getItem('token')) {
+    auth.fetchUser()
+  } else {
+    auth.loaded = true
+  }
 })
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
     <!-- HEADER -->
-
     <TheHeader />
-
-
 
     <!-- PAGE CONTENT -->
     <main class="flex-1 min-h-[70vh]">

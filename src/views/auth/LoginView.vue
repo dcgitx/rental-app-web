@@ -34,7 +34,7 @@ const errors = ref({
 
 const loading = ref(false)
 
-const submit = async () => {
+/*const submit = async () => {
     loading.value = true
     errors.value = { email: null, password: null }
 
@@ -52,8 +52,41 @@ const submit = async () => {
 
         await auth.fetchUser()
 
+        localStorage.setItem('token', data.token)
+
         router.push({ name: 'home' })
 
+        password.value = ''
+    } catch (e) {
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors || {}
+        } else {
+            console.error(e)
+        }
+    } finally {
+        loading.value = false
+    }
+}*/
+
+const submit = async () => {
+    loading.value = true
+    errors.value = { email: null, password: null }
+
+    try {
+        const { data } = await api.post('/login', {
+            email: email.value,
+            password: password.value,
+            remember: remember.value,
+        })
+
+        // 🔑 store token
+        localStorage.setItem('token', data.token)
+
+        // load user via /auth-check
+        auth.user = data.user
+        auth.loaded = true
+
+        router.push({ name: 'home' })
         password.value = ''
     } catch (e) {
         if (e.response?.status === 422) {
@@ -70,7 +103,23 @@ const submit = async () => {
 <template>
     <div class="flex flex-col items-center justify-start pt-6 min-h-screen px-4 bg-gray-50 dark:bg-gray-900">
         <div
-            class="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+            class="relative w-full max-w-md bg-white lg:mt-4 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+
+            <!-- Loading Overlay -->
+            <div v-if="loading"
+                class="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <!-- Spinner -->
+                <svg class="h-8 w-8 animate-spin text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+
+                <!-- Text -->
+                <p class="mt-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('Signing you in…') }}
+                </p>
+            </div>
 
             <!-- Header -->
             <div class="text-center mb-8">
