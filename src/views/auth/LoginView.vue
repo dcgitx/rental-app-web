@@ -34,40 +34,6 @@ const errors = ref({
 
 const loading = ref(false)
 
-/*const submit = async () => {
-    loading.value = true
-    errors.value = { email: null, password: null }
-
-    try {
-        await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/sanctum/csrf-cookie`,
-            { withCredentials: true }
-        )
-
-        await api.post('/login', {
-            email: email.value,
-            password: password.value,
-            remember: remember.value,
-        })
-
-        await auth.fetchUser()
-
-        localStorage.setItem('token', data.token)
-
-        router.push({ name: 'home' })
-
-        password.value = ''
-    } catch (e) {
-        if (e.response?.status === 422) {
-            errors.value = e.response.data.errors || {}
-        } else {
-            console.error(e)
-        }
-    } finally {
-        loading.value = false
-    }
-}*/
-
 const submit = async () => {
     loading.value = true
     errors.value = { email: null, password: null }
@@ -79,25 +45,41 @@ const submit = async () => {
             remember: remember.value,
         })
 
-        // 🔑 store token
+        // store token
         localStorage.setItem('token', data.token)
 
-        // load user via /auth-check
+        // load user
         auth.user = data.user
         auth.loaded = true
 
+        sessionStorage.setItem('auth:user', JSON.stringify(data.user))
+
         router.push({ name: 'home' })
+
         password.value = ''
     } catch (e) {
         if (e.response?.status === 422) {
-            errors.value = e.response.data.errors || {}
+            const rawErrors = e.response.data.errors || {}
+
+            errors.value = Object.fromEntries(
+                Object.entries(e.response.data.errors || {}).map(
+                    ([k, v]) => [k, v?.[0]]
+                )
+            )
         } else {
             console.error(e)
         }
+
     } finally {
         loading.value = false
     }
 }
+
+const signInWithGoogle = () => {
+    window.location.href =
+        import.meta.env.VITE_BACKEND_URL + '/api/v1/auth/google/redirect'
+}
+
 </script>
 
 <template>
@@ -187,8 +169,8 @@ const submit = async () => {
                     </div>
                 </div>
 
-                <!-- Google button (no-op for now) -->
-                <button type="button" class="flex justify-center w-full" disabled>
+                <!-- sign in with google -->
+                <button type="button" class="flex justify-center w-full" @click="signInWithGoogle">
                     <GoogleSignInButton />
                 </button>
             </form>

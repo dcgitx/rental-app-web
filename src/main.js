@@ -8,6 +8,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { i18n } from '@/i18n'
 import { useLocationStore } from './stores/locationStore'
+import { formatDate } from './lib/date'
 
 import App from './App.vue'
 import router from './router'
@@ -21,6 +22,12 @@ if (!localStorage.getItem('locale')) {
 }
 
 const app = createApp(App)
+
+app.config.globalProperties.$formatDate = formatDate
+
+app.config.globalProperties.$formatMoney = (value) => {
+  return '€' + Number(value).toFixed(2)
+}
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

@@ -40,17 +40,6 @@ watch(
     { immediate: true }
 )
 
-/*onBeforeMount(() => {
-    messaging.connect();
-});*/
-
-/*onMounted(() => {
-    chat.subscribeUserChannel();
-    chat.subscribeExisting();
-    chat.checkUnread();
-    notifications.subscribe();
-});*/
-
 function openNotifications() {
     console.log("before", notifications.hasUnread.value);
     notifications.markAsRead();

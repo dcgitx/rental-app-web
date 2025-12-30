@@ -100,10 +100,14 @@ export function useChatStore() {
   function subscribeUserChannel() {
     if (state._userSubscribed || !user.value?.id) return
 
+    const { connect } = useMessaging()
     const ably = connect()
+
     const userId = user.value.id
 
-    const channel = ably.channels.get(`private-App.Models.User.${userId}`)
+    // Laravel broadcasts this as: App.Models.User.{id}
+    const channelName = `private-App.Models.User.${userId}`
+    const channel = ably.channels.get(channelName)
 
     channel.subscribe('ConversationCreated', (msg) => {
       const event = msg.data
@@ -126,9 +130,14 @@ export function useChatStore() {
     if (state._subscribedExisting) return
 
     try {
-      const { data } = await api.get('/conversations')
+      const response = await api.get('/conversations')
 
-      data.forEach((c) => {
+      // 🔒 normalize API shape
+      const conversations = Array.isArray(response.data)
+        ? response.data
+        : (response.data.data ?? [])
+
+      conversations.forEach((c) => {
         if (!state.chats.find((chat) => chat.id === c.id)) {
           state.chats.push({
             ...c,
@@ -136,6 +145,8 @@ export function useChatStore() {
             unread_count: c.unread_count || 0,
           })
         }
+
+        // ✅ this is now Ably-based
         ensureSubscribed(c.id)
       })
 

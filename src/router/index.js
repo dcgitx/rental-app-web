@@ -24,16 +24,51 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
+      meta: {
+        title: 'About',
+      },
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('../views/PrivacyView.vue'),
+      meta: {
+        title: 'Privacy',
+      },
+    },
+    {
+      path: '/terms',
+      name: 'terms',
+      component: () => import('../views/TermsView.vue'),
+      meta: {
+        title: 'Terms',
+      },
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/auth/LoginView.vue'),
+      meta: {
+        title: 'Login',
+      },
+    },
+    {
+      path: '/oauth/google/callback',
+      name: 'GoogleOAuthCallback',
+      component: () => import('@/views/OAuthCallback.vue'),
     },
     {
       path: '/faqs',
       name: 'FAQs',
       component: () => import('../views/FaqsView.vue'),
+      meta: {
+        title: 'FAQs',
+      },
+    },
+    {
+      path: '/rental/:id',
+      name: 'rental.show',
+      component: () => import('@/views/Rentals/RentalShow.vue'),
     },
     {
       path: '/items/:slug',
@@ -45,7 +80,7 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  const baseTitle = 'Your App Name'
+  const baseTitle = 'Rent Locally'
   const pageTitle = to.meta.title
 
   document.title = pageTitle ? `${pageTitle} | ${baseTitle}` : baseTitle

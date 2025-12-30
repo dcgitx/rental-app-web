@@ -13,8 +13,8 @@ const footerLinks = [
     { name: "About Us", path: "/about", external: false },
     { name: "FAQs", path: "/faqs", external: false },
     { name: "Contact Us", path: "/contact-us", external: false },
-    { name: "Terms & Conditions", path: "/terms", external: false },
-    { name: "Privacy Policy", path: "/privacy-policy", external: false }
+    { name: "Terms & Conditions", path: "/terms", external: true },
+    { name: "Privacy Policy", path: "/privacy", external: true }
 ];
 </script>
 

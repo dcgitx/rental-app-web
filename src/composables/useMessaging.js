@@ -1,4 +1,4 @@
-import * as Ably from 'ably'
+import Ably from 'ably'
 
 let client = null
 
@@ -6,14 +6,13 @@ export function useMessaging() {
   function connect() {
     if (client) return client
 
-    const token = localStorage.getItem('token')
-
     client = new Ably.Realtime({
       authUrl: `${import.meta.env.VITE_API_BASE_URL}/ably/auth`,
       authMethod: 'GET',
+      withCredentials: true,
       authHeaders: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'X-Requested-With': 'XMLHttpRequest',
       },
     })
 

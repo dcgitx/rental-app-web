@@ -15,8 +15,6 @@
     const auth = useAuthStore()
     const router = useRouter()
 
-    console.log(auth.isAuthenticated);
-
     const logout = async () => {
         await auth.logout()
         router.push({ name: 'home' })
@@ -85,7 +83,8 @@
                 </div>
 
                 <!-- User Options -->
-                <div v-else class="flex w-full flex-row items-center gap-4 justify-center divide-x-2 divide-gray-600">
+                <div v-else-if="auth.loaded"
+                    class="flex w-full flex-row items-center gap-4 justify-center divide-x-2 divide-gray-600">
                     <Dropdown align="right" width="48">
                         <template #trigger>
                             <span class="inline-flex rounded-md">
@@ -158,5 +157,6 @@
         </nav>
     </header>
     <UserNav v-if="auth.isAuthenticated" />
+
 </template>
 
