@@ -3,6 +3,7 @@ import { ref } from "vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
 import ContactButton from "./ContactButton.vue";
 
+
 const props = defineProps({
     listerRentals: Array,
     renterRentals: Array,
