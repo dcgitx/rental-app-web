@@ -1,15 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { router, Link } from "@inertiajs/vue3";
 import axios from "axios";
-import { useChatStore } from "@/Composables/useChatStore";
+import { useChatStore } from "@/composables/useChatStore";
 import {
     ChatBubbleOvalLeftEllipsisIcon,
     EnvelopeIcon,
     EyeIcon,
 } from "@heroicons/vue/24/outline";
-import CancelButton from "@/Components/CancelButton.vue";
-import ViewRentalButton from "@/Components/ViewRentalButton.vue";
+import CancelButton from "@/components/CancelButton.vue";
+import ViewRentalButton from "@/components/ViewRentalButton.vue";
 
 const listerRentals = ref([]);
 const renterRentals = ref([]);
@@ -54,7 +53,7 @@ const changeRentalStatus = (id, status) => {
     );
 };
 
-onMounted(fetchRentals);
+//onMounted(fetchRentals);
 
 </script>
 

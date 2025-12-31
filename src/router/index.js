@@ -66,6 +66,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/rentals',
+      name: 'rentals',
+      component: () => import('../views/Rentals/Rentals.vue'),
+      meta: {
+        title: 'Rentals',
+      },
+    },
+    {
       path: '/rental/:id',
       name: 'rental.show',
       component: () => import('@/views/Rentals/RentalShow.vue'),

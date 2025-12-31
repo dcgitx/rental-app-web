@@ -1,59 +1,27 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { router, Link } from "@inertiajs/vue3";
-import axios from "axios";
-import { useChatStore } from "@/Composables/useChatStore";
-import {
-    ChatBubbleOvalLeftEllipsisIcon,
-    EyeIcon,
-} from "@heroicons/vue/24/outline";
-import CancelButton from "@/Components/CancelButton.vue";
-import ViewRentalButton from "@/Components/ViewRentalButton.vue";
+import { ref } from "vue";
+import ViewRentalButton from "@/components/ViewRentalButton.vue";
+import CancelButton from "@/components/CancelButton.vue";
+import api from "@/lib/api";
+import ContactButton from "./ContactButton.vue";
 
-const listerRentals = ref([]);
-const renterRentals = ref([]);
-const loading = ref(true);
+const props = defineProps({
+    listerRentals: Array,
+    renterRentals: Array,
+    onRefresh: Function,
+});
 
-const chat = useChatStore();
-
-const activeTabIndex = ref(0);
+const activeTabIndex = ref(1);
 
 const tabs = [
     { title: 'Your Items' },
     { title: 'Your Rentals' },
 ];
 
-const fetchRentals = async () => {
-    try {
-        const response = await axios.get(route('rentals.data', { status: 'upcoming' }));
-        listerRentals.value = response.data.listerRentals;
-        renterRentals.value = response.data.renterRentals;
-    } catch (error) {
-        console.error("Error fetching pending rentals:", error);
-    } finally {
-        loading.value = false;
-    }
+const cancelRental = async (id) => {
+    await api.post(`/rentals/${id}/cancel`);
+    await props.onRefresh();
 };
-
-const changeRentalStatus = (id, status) => {
-    loading.value = true;
-
-    router.post(
-        `/changeRentalStatus/${id}`,
-        { status },
-        {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: fetchRentals,
-            onError: (errors) => console.error(errors),
-            onFinish: () => {
-                loading.value = false;
-            },
-        }
-    );
-};
-
-onMounted(fetchRentals);
 </script>
 
 <template>
@@ -72,14 +40,9 @@ onMounted(fetchRentals);
             </div>
         </div>
 
-        <!-- Loading State -->
-        <div v-if="loading" class="flex justify-center p-8">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
-        </div>
-
-        <div v-else>
+        <div>
             <!--Bookings for this users items-->
-            <div v-if="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="listerRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in listerRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:border-gray-500">
@@ -100,11 +63,8 @@ onMounted(fetchRentals);
                         <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-gray-200">
                             <div class="pt-4 sm:flex flex-col items-center">
                                 <div class="flex space-x-2 sm:min-w-0 sm:flex-1">
-                                    <img :src="rental.rental_item.images[0]
-                                        ?.image_sm
-                                        " :alt="rental.rental_item.images[0]
-                                            ?.alt_image_sm
-                                            " class="size-20 flex-none rounded-md object-fit sm:size-24" />
+                                    <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
+                                        class="size-20 flex-none rounded-md object-fit sm:size-24" />
                                     <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                         <p class="whitespace-nowrap text-sm mt-1">
                                             Rental Start:
@@ -133,19 +93,12 @@ onMounted(fetchRentals);
                                         </p>
                                     </div>
                                 </div>
+
+                                <!--actions-->
                                 <div class="space-y-4 w-full pt-4">
-                                    <!--contact-->
-                                    <button @click="chat.open(rental.id)"
-                                        class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
-                                        <ChatBubbleOvalLeftEllipsisIcon class="size-5 mr-1" />
-                                        Contact renter
-                                    </button>
-
-                                    <!--view rental-->
+                                    <ContactButton :rental-id="rental.id">Contact Renter</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-
-                                    <CancelButton @click="changeRentalStatus(rental.id, 'lister cancelled',)">Cancel
-                                    </CancelButton>
+                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +112,7 @@ onMounted(fetchRentals);
             </div>
 
             <!--Bookings for other users items-->
-            <div v-if="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="renterRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in renterRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:border-gray-500">
@@ -180,11 +133,8 @@ onMounted(fetchRentals);
                         <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-gray-200">
                             <div class="pt-4 sm:flex flex-col items-center">
                                 <div class="flex sm:min-w-0 sm:flex-1 space-x-2">
-                                    <img :src="rental.rental_item.images[0]
-                                        ?.image_sm
-                                        " :alt="rental.rental_item.images[0]
-                                            ?.alt_image_sm
-                                            " class="size-20 flex-none rounded-md object-cover sm:size-24" />
+                                    <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
+                                        class="size-20 flex-none rounded-md object-cover sm:size-24" />
                                     <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                         <p class="sm:whitespace-nowrap text-sm mt-1">
                                             Rental Start:
@@ -263,17 +213,9 @@ onMounted(fetchRentals);
                                     </div>
                                 </div>
                                 <div class="space-y-4 w-full pt-4">
-                                    <button @click="chat.open(rental.id)"
-                                        class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
-                                        <ChatBubbleOvalLeftEllipsisIcon class="size-5 mr-1" />
-                                        Contact Lister
-                                    </button>
-
-                                    <!--view rental-->
+                                    <ContactButton :rental-id="rental.id">Contact Lister</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-
-                                    <CancelButton @click="changeRentalStatus(rental.id, 'renter cancelled',)">Cancel
-                                    </CancelButton>
+                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
                                     <p
                                         class="mt-1 text-sm font-semibold py-1 bg-gray-200 dark:bg-gray-800 rounded text-center">
                                         <span class="font-medium">Cancellation Fee: </span>€{{ 0 }}

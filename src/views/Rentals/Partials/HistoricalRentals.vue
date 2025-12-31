@@ -1,9 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useChatStore } from "@/Composables/useChatStore";
+import { useChatStore } from "@/composables/useChatStore";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/vue/24/outline";
-import { Link } from "@inertiajs/vue3";
 
 const listerRentals = ref([]);
 const renterRentals = ref([]);
