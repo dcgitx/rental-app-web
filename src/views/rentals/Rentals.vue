@@ -3,11 +3,11 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { fetchRentals } from "@/api/rentals";
 import { useAuthStore } from "@/stores/auth";
 
-import BookedRentals from "./Partials/BookedRentals.vue";
-import PendingRentals from "./Partials/PendingRentals.vue";
-import HistoricalRentals from "./Partials/HistoricalRentals.vue";
+import BookedRentals from "./partials/BookedRentals.vue";
+import PendingRentals from "./partials/PendingRentals.vue";
+import HistoricalRentals from "./partials/HistoricalRentals.vue";
 
-import ActiveRentals from "./Partials/ActiveRentals.vue";
+import ActiveRentals from "./partials/ActiveRentals.vue";
 
 const auth = useAuthStore();
 const rentals = ref([]);
