@@ -1,64 +1,19 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { fetchRentals } from "@/api/rentals";
+import { useAuthStore } from "@/stores/auth";
 
 import BookedRentals from "./Partials/BookedRentals.vue";
 import PendingRentals from "./Partials/PendingRentals.vue";
 import HistoricalRentals from "./Partials/HistoricalRentals.vue";
-import { useAuthStore } from "@/stores/auth";
+
 import ActiveRentals from "./Partials/ActiveRentals.vue";
 
 const auth = useAuthStore();
-
 const rentals = ref([]);
-
-const listerRentals = computed(() =>
-    rentals.value.filter(r => r.item_owner_id === auth.user.id)
-);
-
-const renterRentals = computed(() =>
-    rentals.value.filter(r => r.requestor_id === auth.user.id)
-);
-
-//const activeTabIndex = ref(0);
-
 const activeTabKey = ref(
     window.location.hash.replace('#', '') || 'active'
 );
-
-const syncFromHash = () => {
-    activeTabKey.value =
-        window.location.hash.replace('#', '') || 'active';
-};
-
-onMounted(() => {
-    window.addEventListener('hashchange', syncFromHash);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('hashchange', syncFromHash);
-});
-
-const setActiveTab = (key) => {
-    activeTabKey.value = key;
-    window.location.hash = key;
-};
-
-/*const activeTabKey = computed({
-    get() {
-        return window.location.hash.replace('#', '') || 'active';
-    },
-    set(key) {
-        window.location.hash = key;
-    },
-});*/
-
-/*const tabs = [
-    { title: 'Active' },
-    { title: 'Booked' },
-    { title: 'Requests' },
-    { title: 'History' },
-];*/
 
 const tabs = [
     { key: 'active', title: 'Active' },
@@ -67,13 +22,69 @@ const tabs = [
     { key: 'history', title: 'History' },
 ];
 
-
-const reloadRentals = async () => {
-    const { data } = await fetchRentals();
-    rentals.value = data;
+const STATUS_GROUPS = {
+    active: ['started'],
+    booked: ['booked'],
+    requests: ['pending'],
+    history: [
+        'completed',
+        'declined',
+        'expired',
+        'lister_cancelled',
+        'renter_cancelled',
+        'refunded',
+    ],
 };
 
-onMounted(reloadRentals);
+const rentalsByStatus = computed(() => {
+    return rentals.value.filter(r =>
+        STATUS_GROUPS[activeTabKey.value]?.includes(r.status)
+    );
+});
+
+const listerRentals = computed(() => {
+    if (!auth.user) return [];
+    return rentalsByStatus.value.filter(
+        r => r.item_owner_id === auth.user.id
+    );
+});
+
+const renterRentals = computed(() => {
+    if (!auth.user) return [];
+    return rentalsByStatus.value.filter(
+        r => r.requestor_id === auth.user.id
+    );
+});
+
+const syncFromHash = () => {
+    activeTabKey.value =
+        window.location.hash.replace('#', '') || 'active';
+};
+
+const setActiveTab = (key) => {
+    activeTabKey.value = key;
+    window.location.hash = key;
+};
+
+const reloadRentals = async () => {
+    const response = await fetchRentals();
+    //rentals.value = response.data;
+
+    rentals.value = response.data.map(r => ({
+        ...r,
+        item_owner_id: Number(r.item_owner_id),
+        requestor_id: Number(r.requestor_id),
+    }));
+};
+
+onMounted(() => {
+    window.addEventListener('hashchange', syncFromHash);
+    reloadRentals();
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('hashchange', syncFromHash);
+});
 </script>
 
 <template>
@@ -98,12 +109,13 @@ onMounted(reloadRentals);
         <ActiveRentals v-show="activeTabKey === 'active'" :lister-rentals="listerRentals"
             :renter-rentals="renterRentals" class="w-full" />
 
-        <BookedRentals v-show="activeTabKey === 'booked'" :lister-rentals="listerRentals"
+        <BookedRentals v-show="auth.user && rentals.length && activeTabKey === 'booked'" :lister-rentals="listerRentals"
             :renter-rentals="renterRentals" :on-refresh="reloadRentals" class="w-full" />
 
-        <PendingRentals v-show="activeTabKey === 'requests'" :lister-rentals="listerRentals"
+        <PendingRentals v-show="rentals.length && activeTabKey === 'requests'" :lister-rentals="listerRentals"
             :renter-rentals="renterRentals" :on-refresh="reloadRentals" class="w-full" />
 
-        <HistoricalRentals v-show="activeTabKey === 'history'" class="w-full" />
+        <HistoricalRentals v-show="rentals.length && activeTabKey === 'history'" :lister-rentals="listerRentals"
+            :renter-rentals="renterRentals" class="w-full" />
     </div>
 </template>

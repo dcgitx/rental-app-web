@@ -1,32 +1,18 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useChatStore } from "@/composables/useChatStore";
-import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/vue/24/outline";
+import { ref } from "vue";
 
-const listerRentals = ref([]);
-const renterRentals = ref([]);
-const loading = ref(true);
+const props = defineProps({
+    listerRentals: Array,
+    renterRentals: Array,
+});
 
-const chat = useChatStore();
 const activeTabIndex = ref(0);
+const loading = ref(false);
 
 const tabs = [
     { title: 'Your Items' },
     { title: 'Your Rentals' },
 ];
-
-onMounted(async () => {
-    try {
-        const response = await axios.get(route('rentals.data', { status: 'history' }));
-        listerRentals.value = response.data.listerRentals;
-        renterRentals.value = response.data.renterRentals;
-    } catch (error) {
-        console.error("Error fetching historical rentals:", error);
-    } finally {
-        loading.value = false;
-    }
-});
 </script>
 
 <template>
@@ -52,12 +38,11 @@ onMounted(async () => {
 
         <div v-else>
             <!--History for this users items-->
-            <div v-if="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="listerRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in listerRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:border-gray-500 opacity-75 hover:opacity-100 transition-opacity">
-                        <a as="div" :href="route('rental.show', rental.id)" class="hover:cursor-pointer"
-                            target="_blank">
+                        <a as="div" href="#" class="hover:cursor-pointer" target="_blank">
                             <div class=" space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                                 <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                     Rental #{{ rental.id }}
@@ -78,8 +63,7 @@ onMounted(async () => {
                             <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-gray-200">
                                 <div class="pt-4 sm:flex flex-col items-center">
                                     <div class="flex space-x-2 sm:min-w-0 sm:flex-1">
-                                        <img :src="rental.rental_item.images[0]?.image_sm"
-                                            :alt="rental.rental_item.images[0]?.alt_image_sm"
+                                        <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
                                             class="size-20 flex-none rounded-md object-fit sm:size-24 grayscale" />
                                         <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                             <p class="whitespace-nowrap text-sm mt-1">
@@ -107,12 +91,11 @@ onMounted(async () => {
             </div>
 
             <!--History for other users items-->
-            <div v-if="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="renterRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in renterRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:border-gray-500 opacity-75 hover:opacity-100 transition-opacity">
-                        <a as="div" :href="route('rental.show', rental.id)" class="hover:cursor-pointer"
-                            target="_blank">
+                        <a as="div" href="#" class="hover:cursor-pointer" target="_blank">
                             <div class="space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                                 <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                     Rental #{{ rental.id }}
@@ -133,8 +116,7 @@ onMounted(async () => {
                             <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-gray-200">
                                 <div class="pt-4 sm:flex flex-col items-center">
                                     <div class="flex sm:min-w-0 sm:flex-1 space-x-2">
-                                        <img :src="rental.rental_item.images[0]?.image_sm"
-                                            :alt="rental.rental_item.images[0]?.alt_image_sm"
+                                        <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
                                             class="size-20 flex-none rounded-md object-cover sm:size-24 grayscale" />
                                         <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                             <p class="sm:whitespace-nowrap text-sm mt-1">

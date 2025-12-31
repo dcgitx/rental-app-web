@@ -1,60 +1,41 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useChatStore } from "@/composables/useChatStore";
+import { ref } from "vue";
 import {
-    ChatBubbleOvalLeftEllipsisIcon,
+
     EnvelopeIcon,
-    EyeIcon,
 } from "@heroicons/vue/24/outline";
 import CancelButton from "@/components/CancelButton.vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
+import ContactButton from "./ContactButton.vue";
 
-const listerRentals = ref([]);
-const renterRentals = ref([]);
-const loading = ref(true);
-
-const chat = useChatStore();
+const props = defineProps({
+    listerRentals: Array,
+    renterRentals: Array,
+    onRefresh: Function,
+});
 
 const activeTabIndex = ref(0);
+const loading = ref(false);
 
 const tabs = [
-    { title: 'Received' },
-    { title: 'Sent' },
+    { title: 'Your Items' },
+    { title: 'Your Rentals' },
 ];
 
-const fetchRentals = async () => {
-    try {
-        const response = await axios.get(route('rentals.data', { status: 'requests' }));
-        listerRentals.value = response.data.listerRentals;
-        renterRentals.value = response.data.renterRentals;
-    } catch (error) {
-        console.error("Error fetching pending rentals:", error);
-    } finally {
-        loading.value = false;
-    }
+const acceptRental = async (id) => {
+    await api.post(`/rentals/${id}/accept`);
+    await props.onRefresh();
 };
 
-const changeRentalStatus = (id, status) => {
-    loading.value = true;
-
-    router.post(
-        `/changeRentalStatus/${id}`,
-        { status },
-        {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: fetchRentals,
-            onError: (errors) => console.error(errors),
-            onFinish: () => {
-                loading.value = false;
-            },
-        }
-    );
+const declineRental = async (id) => {
+    await api.post(`/rentals/${id}/decline`);
+    await props.onRefresh();
 };
 
-//onMounted(fetchRentals);
-
+const cancelRental = async (id) => {
+    await api.post(`/rentals/${id}/cancel`);
+    await props.onRefresh();
+};
 </script>
 
 <template>
@@ -80,7 +61,7 @@ const changeRentalStatus = (id, status) => {
 
         <div v-else>
             <!--lister received requests-->
-            <div v-if="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="listerRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in listerRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:border-gray-500">
@@ -101,11 +82,8 @@ const changeRentalStatus = (id, status) => {
                         <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-gray-200">
                             <div class="pt-4 sm:flex flex-col items-center">
                                 <div class="flex sm:min-w-0 sm:flex-1 space-x-2">
-                                    <img :src="rental.rental_item.images[0]
-                                        ?.image_sm
-                                        " :alt="rental.rental_item.images[0]
-                                            ?.alt_image_sm
-                                            " class="size-20 flex-none rounded-md object-fit sm:size-24" />
+                                    <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
+                                        class="size-20 flex-none rounded-md object-fit sm:size-24" />
                                     <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                         <p class="mt-1 font-medium">
                                             <span>Your Profit: </span>€{{
@@ -147,30 +125,15 @@ const changeRentalStatus = (id, status) => {
                                 </div>
                                 <div class="space-y-4 w-full pt-4">
                                     <!--accept rental-->
-                                    <button @click="
-                                        changeRentalStatus(
-                                            rental.id,
-                                            'booked',
-                                        )
-                                        "
+                                    <button @click="acceptRental(rental.id)"
                                         class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
                                         <EnvelopeIcon class="size-5 mr-1" />
-                                        Accept
+                                        Accept Rental
                                     </button>
 
-                                    <!--message renter-->
-                                    <button @click="chat.open(rental.id)"
-                                        class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
-                                        <ChatBubbleOvalLeftEllipsisIcon class="size-5 mr-1" />
-                                        Message Renter
-                                    </button>
-
-                                    <!--view rental-->
+                                    <ContactButton :rental-id="rental.id">Message Renter</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-
-                                    <!--decline rental-->
-                                    <CancelButton @click="changeRentalStatus(rental.id, 'declined',)">Decline
-                                    </CancelButton>
+                                    <CancelButton @click="declineRental(rental.id)">Decline</CancelButton>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +147,7 @@ const changeRentalStatus = (id, status) => {
             </div>
 
             <!--lister sent requests-->
-            <div v-if="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
+            <div v-show="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="renterRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in renterRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:border-gray-500">
@@ -205,11 +168,8 @@ const changeRentalStatus = (id, status) => {
                         <div class="mt-2 flow-root divide-y divide-gray-200 border-t border-t-gray-200">
                             <div class="pt-4 sm:flex flex-col items-center">
                                 <div class="flex space-x-2 sm:min-w-0 sm:flex-1">
-                                    <img :src="rental.rental_item.images[0]
-                                        ?.image_sm
-                                        " :alt="rental.rental_item.images[0]
-                                            ?.alt_image_sm
-                                            " class="size-20 flex-none rounded-md object-fit sm:size-24" />
+                                    <img :src="rental.rental_item.image.src" :alt="rental.rental_item.image.alt"
+                                        class="size-20 flex-none rounded-md object-fit sm:size-24" />
                                     <div class="min-w-0 flex-1 pt-1.5 sm:pt-0">
                                         <p class="mt-1 font-medium">
                                             <span>Total Paid: </span>€{{
@@ -255,17 +215,13 @@ const changeRentalStatus = (id, status) => {
                                     </div>
                                 </div>
                                 <div class="space-y-4 w-full sm:flex-none pt-4">
-                                    <Link as="button" href="#"
+                                    <button
                                         class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
-                                    <EnvelopeIcon class="size-5 mr-1" />
-                                    Remind Lister
-                                    </Link>
-
-                                    <!--view rental-->
+                                        <EnvelopeIcon class="size-5 mr-1" />
+                                        Remind Lister (todo)
+                                    </button>
                                     <ViewRentalButton :rental-id="rental.id" />
-
-                                    <CancelButton @click="changeRentalStatus(rental.id, 'renter cancelled',)">Cancel
-                                    </CancelButton>
+                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
                                 </div>
                             </div>
                         </div>

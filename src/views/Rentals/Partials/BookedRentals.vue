@@ -11,7 +11,7 @@ const props = defineProps({
     onRefresh: Function,
 });
 
-const activeTabIndex = ref(1);
+const activeTabIndex = ref(0);
 
 const tabs = [
     { title: 'Your Items' },
