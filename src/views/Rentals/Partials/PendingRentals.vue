@@ -4,7 +4,7 @@ import { acceptRental, cancelRental, declineRental } from "@/api/rentals";
 import { EnvelopeIcon } from "@heroicons/vue/24/outline";
 import CancelButton from "@/components/CancelButton.vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
-import ContactButton from "./ContactButton.vue";
+import ContactButton from "@/views/rentals/partials/ContactButton.vue";
 
 const props = defineProps({
     listerRentals: Array,

@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
-import ContactButton from "./ContactButton.vue";
-
+import ContactButton from "@/views/rentals/partials/ContactButton.vue";
 
 const props = defineProps({
     listerRentals: Array,

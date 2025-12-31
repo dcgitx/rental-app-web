@@ -68,7 +68,7 @@ const router = createRouter({
     {
       path: '/rentals',
       name: 'rentals',
-      component: () => import('../views/Rentals/Rentals.vue'),
+      component: () => import('../views/rentals/Rentals.vue'),
       meta: {
         title: 'Rentals',
       },
@@ -76,7 +76,7 @@ const router = createRouter({
     {
       path: '/rental/:id',
       name: 'rental.show',
-      component: () => import('@/views/Rentals/RentalShow.vue'),
+      component: () => import('@/views/rentals/RentalShow.vue'),
     },
     {
       path: '/items/:slug',
