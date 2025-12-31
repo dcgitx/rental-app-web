@@ -3,7 +3,6 @@ import FavouritesPanel from "./FavouritesPanel.vue";
 import ChatPanel from "./ChatPanel.vue";
 import NotificationsPanel from "./NotificationsPanel.vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
-import { onMounted, onUnmounted } from "vue";
 
 defineProps({
     activePanel: String,
@@ -24,7 +23,7 @@ defineProps({
 
 <template>
     <transition name="slide">
-        <div v-if="activePanel" class="absolute right-0 w-80 bg-white dark:bg-gray-800 shadow-lg z-50">
+        <div v-if="activePanel" class="absolute right-0 min-w-80 w-auto bg-white dark:bg-gray-800 shadow-lg z-50">
             <button class=" absolute top-2 right-2 text-teal-700 font-semibold hover:text-teal-600 flex"
                 @click="$emit('close')">
                 <XMarkIcon class="size-5 dark:text-black" />
@@ -34,7 +33,7 @@ defineProps({
             <div v-if="activePanel === 'favourites'">
                 <h1
                     class="px-2 py-2 border-b border-teal-600 bg-teal-600/20 dark:bg-teal-600 font-semibold dark:text-gray-800">
-                    Your Saved Favourites
+                    Your Favourites
                 </h1>
                 <FavouritesPanel />
             </div>

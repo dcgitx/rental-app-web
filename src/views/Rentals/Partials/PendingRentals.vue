@@ -7,6 +7,7 @@ import {
 import CancelButton from "@/components/CancelButton.vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
 import ContactButton from "./ContactButton.vue";
+import { acceptRental, cancelRental, declineRental } from "@/api/rentals";
 
 const props = defineProps({
     listerRentals: Array,
@@ -22,18 +23,18 @@ const tabs = [
     { title: 'Your Rentals' },
 ];
 
-const acceptRental = async (id) => {
-    await api.post(`/rentals/${id}/accept`);
+const accept = async (id) => {
+    await acceptRental(id)
     await props.onRefresh();
 };
 
-const declineRental = async (id) => {
-    await api.post(`/rentals/${id}/decline`);
+const decline = async (id) => {
+    await declineRental(id)
     await props.onRefresh();
 };
 
-const cancelRental = async (id) => {
-    await api.post(`/rentals/${id}/cancel`);
+const cancel = async (id) => {
+    await cancelRental(id)
     await props.onRefresh();
 };
 </script>
@@ -125,7 +126,7 @@ const cancelRental = async (id) => {
                                 </div>
                                 <div class="space-y-4 w-full pt-4">
                                     <!--accept rental-->
-                                    <button @click="acceptRental(rental.id)"
+                                    <button @click="accept(rental.id)"
                                         class="flex w-full items-center justify-center rounded-md border border-transparent bg-teal-600 px-2.5 py-2 text-sm font-medium text-white shadow-xs hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-hidden sm:grow-0 transition-all ease-in-out duration-200">
                                         <EnvelopeIcon class="size-5 mr-1" />
                                         Accept Rental
@@ -133,7 +134,7 @@ const cancelRental = async (id) => {
 
                                     <ContactButton :rental-id="rental.id">Message Renter</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-                                    <CancelButton @click="declineRental(rental.id)">Decline</CancelButton>
+                                    <CancelButton @click="decline(rental.id)">Decline</CancelButton>
                                 </div>
                             </div>
                         </div>
@@ -221,7 +222,7 @@ const cancelRental = async (id) => {
                                         Remind Lister (todo)
                                     </button>
                                     <ViewRentalButton :rental-id="rental.id" />
-                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
+                                    <CancelButton @click="cancel(rental.id)">Cancel</CancelButton>
                                 </div>
                             </div>
                         </div>

@@ -19,8 +19,6 @@ onMounted(async () => {
     chat.ensureSubscribedMany(conversations.value.map((c) => c.id));
 
     loading.value = false;
-
-    console.log('loading chats from mounted');
 });
 
 function openChat(conversation) {

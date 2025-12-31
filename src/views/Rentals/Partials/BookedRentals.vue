@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
 import CancelButton from "@/components/CancelButton.vue";
-import api from "@/lib/api";
 import ContactButton from "./ContactButton.vue";
+import { cancelRental } from "@/api/rentals";
 
 const props = defineProps({
     listerRentals: Array,
@@ -18,8 +18,8 @@ const tabs = [
     { title: 'Your Rentals' },
 ];
 
-const cancelRental = async (id) => {
-    await api.post(`/rentals/${id}/cancel`);
+const cancel = async (id) => {
+    await cancelRental(id)
     await props.onRefresh();
 };
 </script>
@@ -98,7 +98,7 @@ const cancelRental = async (id) => {
                                 <div class="space-y-4 w-full pt-4">
                                     <ContactButton :rental-id="rental.id">Contact Renter</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
+                                    <CancelButton @click="cancel(rental.id)">Cancel</CancelButton>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +215,7 @@ const cancelRental = async (id) => {
                                 <div class="space-y-4 w-full pt-4">
                                     <ContactButton :rental-id="rental.id">Contact Lister</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
-                                    <CancelButton @click="cancelRental(rental.id)">Cancel</CancelButton>
+                                    <CancelButton @click="cancel(rental.id)">Cancel</CancelButton>
                                     <p
                                         class="mt-1 text-sm font-semibold py-1 bg-gray-200 dark:bg-gray-800 rounded text-center">
                                         <span class="font-medium">Cancellation Fee: </span>€{{ 0 }}

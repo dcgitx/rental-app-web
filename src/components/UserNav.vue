@@ -89,11 +89,13 @@ function openNotifications() {
 
                 <!-- Right Section: Actions -->
                 <div class="flex items-center gap-1">
-                    <RouterLink to="/favourites"
+
+                    <!-- Favourites -->
+                    <button @click="togglePanel('favourites')"
                         class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:text-teal-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400">
                         <HeartIcon class="w-5 h-5" aria-hidden="true" />
                         <span>Favourites</span>
-                    </RouterLink>
+                    </button>
 
                     <!-- Chats -->
                     <button @click="togglePanel('chat')"
