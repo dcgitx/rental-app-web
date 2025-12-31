@@ -4,6 +4,10 @@ export function fetchRentals() {
   return api.get('/rentals')
 }
 
+export function showRental(id) {
+  return api.get(`/rentals/${id}`)
+}
+
 export function acceptRental(id) {
   return api.post(`/rentals/${id}/accept`)
 }

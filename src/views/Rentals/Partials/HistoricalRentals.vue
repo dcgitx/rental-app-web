@@ -42,7 +42,8 @@ const tabs = [
                 <div v-if="listerRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in listerRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:border-gray-500 opacity-75 hover:opacity-100 transition-opacity">
-                        <a as="div" href="#" class="hover:cursor-pointer" target="_blank">
+                        <RouterLink :to="{ name: 'rental.show', params: { id: rental.id } }" as="div"
+                            class="hover:cursor-pointer">
                             <div class=" space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                                 <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                     Rental #{{ rental.id }}
@@ -81,7 +82,7 @@ const tabs = [
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </RouterLink>
                     </section>
                 </div>
                 <div v-else class="flex justify-center w-full">
@@ -95,7 +96,8 @@ const tabs = [
                 <div v-if="renterRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in renterRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
                         class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:border-gray-500 opacity-75 hover:opacity-100 transition-opacity">
-                        <a as="div" href="#" class="hover:cursor-pointer" target="_blank">
+                        <RouterLink :to="{ name: 'rental.show', params: { id: rental.id } }" as="div"
+                            class="hover:cursor-pointer">
                             <div class="space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                                 <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                     Rental #{{ rental.id }}
@@ -134,7 +136,7 @@ const tabs = [
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </RouterLink>
                     </section>
                 </div>
                 <div v-else class="flex justify-center w-full">

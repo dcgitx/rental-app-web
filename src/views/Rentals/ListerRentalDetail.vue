@@ -1,5 +1,4 @@
 <script setup>
-
 import {
     Tab,
     TabGroup,
@@ -11,14 +10,10 @@ import {
 const props = defineProps({
     rental: Object
 });
-
 </script>
 
 <template>
-
-
     <div class="w-full flex flex-col items-center">
-
         <div class="flex flex-col gap-6 w-full justify-center">
             <div>
                 <h1 class="text-2xl font-bold pt-10 text-center">Rental of Your Item - {{
@@ -81,11 +76,11 @@ const props = defineProps({
                             <li>Paid: <span class="font-semibold">{{ $formatMoney(rental.total_price) }}</span></li>
                             <li>Vat ({{ rental.vat_rate }}%): <span class="font-semibold">{{
                                 $formatMoney(rental.vat)
-                            }}</span>
+                                    }}</span>
                             </li>
                             <li v-if="rental.is_refunded">Refunded: <span class="font-semibold">{{
                                 $formatMoney(rental.refund_amount)
-                            }}</span></li>
+                                    }}</span></li>
                         </ul>
                     </div>
 

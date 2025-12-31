@@ -1,13 +1,10 @@
 <script setup>
 import { ref } from "vue";
-import {
-
-    EnvelopeIcon,
-} from "@heroicons/vue/24/outline";
+import { acceptRental, cancelRental, declineRental } from "@/api/rentals";
+import { EnvelopeIcon } from "@heroicons/vue/24/outline";
 import CancelButton from "@/components/CancelButton.vue";
 import ViewRentalButton from "@/components/ViewRentalButton.vue";
 import ContactButton from "./ContactButton.vue";
-import { acceptRental, cancelRental, declineRental } from "@/api/rentals";
 
 const props = defineProps({
     listerRentals: Array,
@@ -131,7 +128,6 @@ const cancel = async (id) => {
                                         <EnvelopeIcon class="size-5 mr-1" />
                                         Accept Rental
                                     </button>
-
                                     <ContactButton :rental-id="rental.id">Message Renter</ContactButton>
                                     <ViewRentalButton :rental-id="rental.id" />
                                     <CancelButton @click="decline(rental.id)">Decline</CancelButton>
