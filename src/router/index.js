@@ -80,9 +80,13 @@ const router = createRouter({
     },
     {
       path: '/items/:slug',
+      name: 'item.show',
+      component: () => import('@/views/rentalItems/ShowRentalItem.vue'),
+    },
+    {
+      path: '/categories/:slug',
       name: 'rental-items',
-      //component: RentalItemsView,
-      props: true,
+      component: () => import('@/views/Placeholder.vue'),
     },
   ],
 })
