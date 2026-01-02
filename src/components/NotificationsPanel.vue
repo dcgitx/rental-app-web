@@ -37,16 +37,18 @@ function openNotification(notification) {
         <ul v-else-if="notifications.length >= 1"
             class="divide-y divide-gray-200 dark:divide-black max-h-[60vh] overflow-y-auto">
             <li v-for="notification in notifications" :key="notification.id"
-                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-in-out duration-200 p-1"
+                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all ease-in-out duration-200 p-1"
                 @click="openNotification(notification)">
                 <div class="flex flex-col items-start justify-between gap-2">
                     <div class="flex flex-col w-full">
-                        <div class="font-semibold" :class="!notification.is_read ? '' : 'text-gray-500 text-sm'">
+                        <div class="font-semibold"
+                            :class="!notification.is_read ? 'dark:text-gray-300' : 'text-gray-500 text-sm'">
                             {{
                                 notification.title
                             }}
                         </div>
-                        <span class="text-xs text-gray-400">
+                        <span class="text-xs"
+                            :class="!notification.is_read ? 'dark:text-gray-300' : 'text-gray-500 dark:text-gray-600 text-sm'">
                             {{
                                 notification?.description
                             }}

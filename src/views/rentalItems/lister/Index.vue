@@ -146,9 +146,6 @@ const isLoadingMore = computed(() => {
                     <div v-if="isLoadingMore" class="flex justify-center py-6 col-auto">
                         <LoadingState />
                     </div>
-
-
-
                 </div>
 
                 <!-- Empty State -->

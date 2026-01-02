@@ -31,9 +31,9 @@ const cancel = async (id) => {
             <div class="bg-gray-50 dark:bg-transparent rounded-t-lg">
                 <div class="flex flex-row justify-center items-center text-md font-semibold gap-0">
                     <div v-for="(tab, index) in tabs" :key="index"
-                        class="w-32 text-center rounded-t-lg border-gray-500 dark:bg-gray-800 py-2 transition-all ease-in-out duration-200 hover:cursor-pointer"
+                        class="w-32 text-center rounded-t-lg border-gray-500 dark:bg-gray-800 py-2 dark:text-gray-400 transition-all ease-in-out duration-200 hover:cursor-pointer"
                         @click="activeTabIndex = index"
-                        :class="{ 'is-active': activeTabIndex === index, 'bg-teal-600/30 dark:bg-teal-600/30': activeTabIndex === index }">
+                        :class="{ 'is-active': activeTabIndex === index, 'bg-teal-600/30 dark:bg-teal-600/80 dark:text-gray-100': activeTabIndex === index }">
                         {{
                             tab.title }}</div>
                 </div>
@@ -45,7 +45,7 @@ const cancel = async (id) => {
             <div v-show="activeTabIndex === 0" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="listerRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in listerRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
-                        class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:border-gray-500">
+                        class="shadow-lg rounded-lg border p-4 bg-gray-50 dark:bg-black dark:text-gray-300 dark:border-gray-500">
                         <div class="space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                             <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                 Request #{{ rental.id }}
@@ -105,7 +105,8 @@ const cancel = async (id) => {
                     </section>
                 </div>
                 <div v-else class="flex justify-center w-full">
-                    <p class="w-1/2 bg-white dark:bg-transparent p-2 rounded-lg text-center">You have no upcoming
+                    <p class="w-1/2 bg-white dark:text-gray-400 dark:bg-transparent p-2 rounded-lg text-center">You have
+                        no upcoming
                         bookings
                         for your items.</p>
                 </div>
@@ -115,7 +116,7 @@ const cancel = async (id) => {
             <div v-show="activeTabIndex === 1" class="border-t border-gray-400 p-4 mb-4 sm:mb-12 w-full">
                 <div v-if="renterRentals.length >= 1" class="flex flex-row flex-wrap gap-4 justify-center w-full">
                     <section v-for="rental in renterRentals" :key="rental.id" :aria-labelledby="`${rental.id}-heading`"
-                        class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:border-gray-500">
+                        class="shadow-lg rounded-lg border p-4 mb-4 bg-gray-50 dark:bg-black dark:text-gray-300 dark:border-gray-500">
                         <div class="space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4 pt-2">
                             <h2 :id="`${rental.id}-heading`" class="text-lg font-medium md:shrink-0">
                                 Request #{{ rental.id }}
@@ -226,7 +227,8 @@ const cancel = async (id) => {
                     </section>
                 </div>
                 <div v-else class="flex justify-center w-full">
-                    <p class="w-1/2 bg-white dark:bg-transparent p-2 rounded-lg text-center">You have no upcoming
+                    <p class="w-1/2 bg-white dark:text-gray-400 dark:bg-transparent p-2 rounded-lg text-center">You have
+                        no upcoming
                         rentals
                         booked.</p>
                 </div>

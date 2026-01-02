@@ -34,10 +34,10 @@ function openChat(conversation) {
 
         <ul v-else-if="conversations.length >= 1" class="divide-y divide-gray-200 dark:divide-black">
             <li v-for="c in conversations" :key="c.id"
-                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-in-out duration-200 p-1"
+                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all ease-in-out duration-200 p-2"
                 @click="openChat(c)">
                 <div class="flex items-center justify-between">
-                    <span class="font-semibold">
+                    <span class="font-semibold dark:text-gray-300">
                         {{
                             c.renter_id === auth.user.id
                                 ? c.lister.username

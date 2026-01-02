@@ -23,7 +23,7 @@ const remove = async (id) => {
 
         <ul v-else-if="favourites.length >= 1" class="divide-y divide-gray-200 dark:divide-black">
             <li v-for="fav in favourites" :key="fav.id"
-                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all ease-in-out duration-200 p-1">
+                class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-transparent transition-all ease-in-out duration-200 p-1">
 
                 <div class="flex flex-row items-center justify-between gap-2">
 
@@ -31,7 +31,7 @@ const remove = async (id) => {
                         class="size-10 flex-none rounded-md object-fit" />
 
                     <div class="flex flex-col items-start justify-start w-full">
-                        <p class="font-semibold">
+                        <p class="font-semibold dark:text-gray-200">
                             {{ fav.rental_item.title }}
                         </p>
                         <p class="truncate text-sm text-gray-600 dark:text-gray-400 text-wrap">
@@ -40,10 +40,11 @@ const remove = async (id) => {
                     </div>
 
                     <div class="text-xs flex flex-col gap-2 items-end justify-start w-full">
-                        <div class="text-gray-600 dark:text-400">added: {{ $formatDate(fav.created_at, "MMM Do YYYY")
+                        <div class="text-gray-600 dark:text-gray-400">
+                            added: {{ $formatDate(fav.created_at, "MMM Do YYYY")
                             }}</div>
                         <button @click="remove(fav.id)"
-                            class="text-sm underline text-blue-500 hover:text-blue-700">remove</button>
+                            class="text-sm underline text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">remove</button>
                     </div>
                 </div>
             </li>

@@ -91,13 +91,13 @@ onBeforeUnmount(() => {
     <div class="w-full text-center py-6">
         <div class="w-full flex justify-center">
             <!--tabs-->
-            <div class="bg-gray-50 dark:bg-transparent rounded-t-lg">
+            <div class=" rounded-t-lg">
                 <div class="flex flex-row justify-center items-center text-md font-semibold gap-0">
 
                     <div v-for="tab in tabs" :key="tab.key"
-                        class="w-32 sm:w-48 text-center rounded-t-lg border-gray-500 dark:bg-gray-800 py-2 transition-all ease-in-out duration-200 hover:cursor-pointer"
+                        class="w-32 sm:w-48 text-center rounded-t-lg border-gray-500 dark:bg-gray-800 py-2 dark:text-gray-400 transition-all ease-in-out duration-200 hover:cursor-pointer"
                         @click="setActiveTab(tab.key)"
-                        :class="{ 'is-active': activeTabKey === tab.key, 'bg-teal-600/30 dark:bg-teal-600/30': activeTabKey === tab.key }">
+                        :class="{ 'is-active': activeTabKey === tab.key, 'bg-teal-600/30 dark:bg-teal-600/80 dark:text-gray-100': activeTabKey === tab.key }">
                         {{
                             tab.title }}</div>
                 </div>

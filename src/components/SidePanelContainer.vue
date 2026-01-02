@@ -47,7 +47,8 @@ defineProps({
             </div>
 
             <div v-else-if="activePanel === 'notifications'">
-                <h1 class="px-2 py-2 border-b border-teal-600 bg-teal-600/20 font-semibold">
+                <h1
+                    class="px-2 py-2 border-b border-teal-600 bg-teal-600/20 dark:bg-teal-600 font-semibold dark:text-gray-900">
                     Your Notifications
                 </h1>
                 <NotificationsPanel v-once />
