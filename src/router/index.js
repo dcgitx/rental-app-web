@@ -45,6 +45,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/contact-us',
+      name: 'contact',
+      component: () => import('../views/ContactUsForm.vue'),
+      meta: {
+        title: 'Contact Us',
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/auth/LoginView.vue'),

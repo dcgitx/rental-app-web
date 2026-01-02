@@ -38,7 +38,7 @@ onMounted(() => {
 <template>
   <!-- Hero Section -->
   <section
-    class="relative bg-gradient-to-br from-teal-600/30 via-teal-600/10 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 px-4 sm:px-6 lg:px-8">
+    class="relative bg-gradient-to-br from-teal-600/30 via-teal-600/10 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto text-center">
       <!-- Main Headline -->
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
