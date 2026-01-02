@@ -192,6 +192,7 @@ const faqs = [
     <LoadingState v-if="isLoading" />
 
     <div v-else class="w-full px-6 py-2 sm:pb-12 sm:pt-4 sm:px-6 lg:px-12 dark:bg-gray-800">
+        <h1 class="text-2xl font-semibold text-red-500 text-center">Lister Item View (todo)</h1>
         <div class="xl:grid xl:grid-cols-2 xl:items-start items-center xl:gap-x-6 pb-24 pt-4">
             <div class="flex flex-col gap-6">
                 <!-- Image gallery -->

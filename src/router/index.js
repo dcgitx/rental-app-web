@@ -53,6 +53,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/faqs',
+      name: 'FAQs',
+      component: () => import('../views/FaqsView.vue'),
+      meta: {
+        title: 'FAQs',
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/auth/LoginView.vue'),
@@ -65,14 +73,7 @@ const router = createRouter({
       name: 'GoogleOAuthCallback',
       component: () => import('@/views/OAuthCallback.vue'),
     },
-    {
-      path: '/faqs',
-      name: 'FAQs',
-      component: () => import('../views/FaqsView.vue'),
-      meta: {
-        title: 'FAQs',
-      },
-    },
+
     {
       path: '/rentals',
       name: 'rentals',
@@ -86,6 +87,23 @@ const router = createRouter({
       name: 'rental.show',
       component: () => import('@/views/rentals/RentalShow.vue'),
     },
+    {
+      path: '/rentalItems',
+      name: 'rentalItems',
+      component: () => import('../views/rentalItems/lister/Index.vue'),
+      meta: {
+        title: 'Your Items',
+      },
+    },
+    {
+      path: '/lister/rental-items/:slug',
+      name: 'lister.rentalItem.show',
+      component: () => import('../views/rentalItems/lister/ShowRentalItem.vue'),
+      meta: {
+        title: 'Show Item',
+      },
+    },
+
     {
       path: '/items/:slug',
       name: 'item.show',

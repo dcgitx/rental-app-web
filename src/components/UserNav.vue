@@ -76,7 +76,7 @@ function openNotifications() {
 
                     <RouterLink v-if="user.can_list"
                         class="px-4 py-2 text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:text-teal-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400"
-                        to="/lister/rentalItems">
+                        to="/rentalItems">
                         Your Listings
                     </RouterLink>
 
