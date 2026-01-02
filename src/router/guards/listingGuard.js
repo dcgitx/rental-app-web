@@ -9,7 +9,13 @@ export function listingGuard(to) {
     return { name: 'home' }
   }
 
-  if (!userData.addresses.length) {
-    return { name: 'home' }
+  if (!userData.loaded) {
+    return null
   }
+
+  return null
+
+  /*if (!userData.addresses.length) {
+    return { name: 'home' }
+  }*/
 }

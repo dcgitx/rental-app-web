@@ -4,6 +4,13 @@ export function authGuard(to) {
   const auth = useAuthStore()
 
   if (!auth.isAuthenticated) {
-    return { name: 'login' }
+    return {
+      name: 'login',
+      query: {
+        redirect: to.fullPath,
+      },
+    }
   }
+
+  return null
 }

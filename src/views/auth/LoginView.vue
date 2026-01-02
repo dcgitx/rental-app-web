@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { ref, nextTick } from 'vue'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 import Checkbox from "@/components/Checkbox.vue";
@@ -10,7 +10,6 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
 import TextInput from "@/components/TextInput.vue";
 import GoogleSignInButton from '@/components/GoogleSignInButton.vue';
 import api from '@/lib/api'
-import axios from 'axios'
 
 const auth = useAuthStore()
 
@@ -22,6 +21,7 @@ defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 
 const email = ref('')
 const password = ref('')
@@ -51,10 +51,17 @@ const submit = async () => {
         // load user
         auth.user = data.user
         auth.loaded = true
-
         sessionStorage.setItem('auth:user', JSON.stringify(data.user))
 
-        router.push({ name: 'home' })
+        await nextTick()
+
+        const redirect =
+            typeof route.query.redirect === 'string' &&
+                route.query.redirect.startsWith('/')
+                ? route.query.redirect
+                : '/'
+
+        router.replace(redirect)
 
         password.value = ''
     } catch (e) {
