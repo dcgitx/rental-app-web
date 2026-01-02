@@ -1,29 +1,12 @@
-import { ref } from 'vue'
-import { fetchCategories } from '@/api/itemCategories'
+import { useReferenceDataStore } from '@/stores/referenceData'
+import { computed } from 'vue'
 
 export function useCategories() {
-  const categories = ref([])
-  const loading = ref(false)
-  const error = ref(null)
-
-  async function load() {
-    loading.value = true
-    error.value = null
-    try {
-      const res = await fetchCategories()
-      categories.value = res.data
-    } catch (e) {
-      console.error(e)
-      error.value = 'Failed to load categories'
-    } finally {
-      loading.value = false
-    }
-  }
+  const store = useReferenceDataStore()
 
   return {
-    categories,
-    loading,
-    error,
-    load,
+    categories: computed(() => store.categories),
+    loading: computed(() => store.categories.length === 0),
+    error: null,
   }
 }

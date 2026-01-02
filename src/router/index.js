@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { authGuard } from './guards/authGuard'
+import { listingGuard } from './guards/listingGuard'
+
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -103,6 +106,24 @@ const router = createRouter({
         title: 'Show Item',
       },
     },
+    {
+      path: '/lister/rental-items/create',
+      name: 'lister.rentalItem.create',
+      component: () => import('../views/rentalItems/lister/Create.vue'),
+      meta: {
+        title: 'Create New Item',
+        requiresAuth: true,
+        requiresListingAccess: true,
+      },
+    },
+    {
+      path: '/itemSubmitted',
+      name: 'item.submitted',
+      component: () => import('../views/rentalItems/lister/ItemSubmitted.vue'),
+      meta: {
+        title: 'Item Submitted',
+      },
+    },
 
     {
       path: '/items/:slug',
@@ -115,6 +136,18 @@ const router = createRouter({
       component: () => import('@/views/Placeholder.vue'),
     },
   ],
+})
+
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth) {
+    const redirect = authGuard(to)
+    if (redirect) return redirect
+  }
+
+  if (to.meta.requiresListingAccess) {
+    const redirect = listingGuard(to)
+    if (redirect) return redirect
+  }
 })
 
 router.afterEach((to) => {

@@ -18,7 +18,6 @@ const {
   categories,
   loading: categoriesLoading,
   error: categoriesError,
-  load: loadCategories,
 } = useCategories()
 
 const {
@@ -29,7 +28,6 @@ const {
 } = useRecentItems()
 
 onMounted(() => {
-  loadCategories()
   loadRecentItems()
 })
 

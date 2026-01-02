@@ -8,6 +8,14 @@ export function fetchRentalItem(slug) {
   return api.get(`/rental-item/${slug}`)
 }
 
+export function storeRentalItem(formData) {
+  return api.post('/rental-item', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}
+
 export function calculateRentalPrice(payload) {
   return api.post('/calculate-rental-price', payload)
 }

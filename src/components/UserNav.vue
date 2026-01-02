@@ -82,7 +82,7 @@ function openNotifications() {
 
                     <RouterLink v-if="user.can_list"
                         class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg transition-all duration-200 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700"
-                        to="/lister/rentalItem/create">
+                        to="/lister/rental-items/create">
                         {{ $t("List a new Item") }}
                     </RouterLink>
                 </nav>
