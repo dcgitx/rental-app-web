@@ -1,5 +1,5 @@
 import api from '@/lib/api'
 
-export function fetchCategories() {
+export function fetchItemCategories() {
   return api.get('/item-categories')
 }

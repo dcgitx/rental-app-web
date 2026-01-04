@@ -72,6 +72,22 @@ const router = createRouter({
       },
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/auth/Register.vue'),
+      meta: {
+        title: 'Sign Up',
+      },
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/auth/SignUpOptions.vue'),
+      meta: {
+        title: 'Sign Up Options',
+      },
+    },
+    {
       path: '/oauth/google/callback',
       name: 'GoogleOAuthCallback',
       component: () => import('@/views/OAuthCallback.vue'),

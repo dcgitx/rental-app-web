@@ -114,7 +114,7 @@
                         </template>
                     </Dropdown>
                     <!-- Locale Selector -->
-                    <div class="flex flex-row justify-center pl-4">
+                    <div v-if="available.length" class="flex flex-row justify-center pl-4">
                         <div class="flex flex-row items-center justify-center rounded-full">
                             <GlobeAltIcon class="-mr-2 mt-0.5 size-6 text-gray-700" />
                             <select @change="localeSelected($event)" v-model="locale"
@@ -132,7 +132,7 @@
                 </div>
 
                 <!-- Guest Locale Selector -->
-                <div v-if="!auth.isAuthenticated" class="flex flex-row justify-center">
+                <div v-if="!auth.isAuthenticated && available.length" class="flex flex-row justify-center">
                     <div class="flex flex-row items-center justify-center rounded-full">
                         <GlobeAltIcon class="-mr-2 mt-0.5 size-6 text-gray-700" />
                         <select @change="localeSelected($event)" v-model="locale"

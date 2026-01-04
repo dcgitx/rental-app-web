@@ -10,16 +10,31 @@ import ChatContainer from '@/views/chats/ChatContainer.vue';
 import TheFooter from "@/components/TheFooter.vue";
 import TheHeader from '@/components/TheHeader.vue';
 import { useUserDataStore } from './stores/userData';
+import { useLocaleStore } from './stores/localeStore';
 
 const auth = useAuthStore();
 const userData = useUserDataStore()
 const { activePanel, closePanel } = usePanelStore();
 
-onMounted(() => {
+const refStore = useReferenceDataStore()
+const localeStore = useLocaleStore()
+
+onMounted(async () => {
+  // Fire these in parallel – no blocking
+  auth.fetchUser()
+
+  await refStore.preload()
+
+  // Hydrate locale AFTER languages exist
+  localeStore.hydrateFromLanguages(refStore.activeLanguages)
+  localeStore.syncI18n()
+})
+
+/*onMounted(() => {
   const refStore = useReferenceDataStore()
   refStore.preload()
   auth.fetchUser()
-})
+})*/
 
 watch(
   () => auth.user,

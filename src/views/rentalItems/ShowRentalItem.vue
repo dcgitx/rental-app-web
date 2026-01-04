@@ -491,7 +491,7 @@ review, reviewIdx
                         rental.
                     </button>
                     <router-link v-if="!user" to="/login"
-                        class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-black px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full transition-all ease-in-out duration-300">
+                        class="flex max-w-xl flex-1 items-center justify-center rounded-md border border-transparent bg-black px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full transition-all ease-in-out duration-300">
                         Log in or Sign up to Request a rental
                     </router-link>
                 </div>
