@@ -16,6 +16,8 @@ if (!payload) {
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
+console.log('Stripe key:', import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+
 const stripeElements = ref(null)
 const isLoading = ref(true)
 const error = ref(null);
