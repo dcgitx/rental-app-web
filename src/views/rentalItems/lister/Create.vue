@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useReferenceDataStore } from '@/stores/referenceData'
 import DangerButton from "@/components/DangerButton.vue";
@@ -120,9 +120,7 @@ function removeImage(index) {
 }
 
 const submit = async () => {
-    console.log(form.value)
     errors.value = {}
-
     try {
         const data = new FormData()
 
