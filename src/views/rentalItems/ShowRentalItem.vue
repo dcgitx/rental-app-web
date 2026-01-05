@@ -44,7 +44,6 @@ const calculatedPrice = ref(null);
 const priceError = ref(null);
 const router = useRouter();
 
-
 const form = ref({
     start_date: null,
     end_date: null,
@@ -167,7 +166,20 @@ watch(selectedDates, (range) => {
     }
 })
 
+watch(
+    () => route.params.slug,
+    () => {
+        // reset item-specific state
+        isLoading.value = true
+        rentalItem.value = null
+        unavailableDates.value = []
+        favouriteId.value = null
+        calculatedPrice.value = null
+        selectedDates.value = { start: null, end: null }
 
+        loadItem()
+    }
+)
 
 const reviews = {
     average: 4,
@@ -498,7 +510,7 @@ review, reviewIdx
                                 )
                             }}
                             <RouterLink to="/terms" target="_blank" class="underline">{{ $t("terms & conditions")
-                                }}</RouterLink>
+                            }}</RouterLink>
                         </p>
                     </FormInfo>
                     <button v-if="user && user.can_rent && user.user_address_id" @click="submit()"

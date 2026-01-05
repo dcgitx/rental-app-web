@@ -20,7 +20,7 @@ export function useRecentItems() {
     const coords =
       locationStore.lat && locationStore.lng ? `${locationStore.lat},${locationStore.lng}` : null
 
-    // ✅ reuse cache if still valid AND same location
+    // reuse cache if still valid AND same location
     if (cachedItems && cachedAt && now - cachedAt < CACHE_TTL && cachedCoords === coords) {
       items.value = cachedItems
       return

@@ -11,6 +11,5 @@ export function authGuard(to) {
       },
     }
   }
-
   return null
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import RenterRentalDetail from './RenterRentalDetail.vue'
 import ListerRentalDetail from './ListerRentalDetail.vue'
@@ -7,25 +7,36 @@ import { useRoute } from 'vue-router'
 import { showRental } from '@/api/rentals'
 import LoadingState from '@/components/LoadingState.vue'
 
-
 const route = useRoute();
 const rental = ref(null);
 const auth = useAuthStore()
 const loading = ref(true);
 
-onMounted(async () => {
-    const { data } = await showRental(route.params.id);
-    rental.value = data;
-    loading.value = false;
+const loadRental = async () => {
+    loading.value = true
 
-    document.title = `Rental #${data.id}`;
-});
+    const { data } = await showRental(route.params.id)
+    rental.value = data
+    loading.value = false
+
+    document.title = `Rental #${data.id}`
+}
+
+onMounted(loadRental)
 
 const isRenter = computed(() => {
     if (!rental.value || !auth.user) return false;
     return rental.value.requestor_id === auth.user.id;
 });
 
+watch(
+    () => route.params.id,
+    () => {
+        loading.value = true
+        rental.value = null
+        loadRental()
+    }
+)
 </script>
 
 <template>

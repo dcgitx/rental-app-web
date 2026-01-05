@@ -18,7 +18,7 @@ onMounted(async () => {
     loading.value = false;
 });
 
-function openNotification(notification) {
+/*function openNotification(notification) {
     api.post(`/notifications/${notification.id}/mark-read`)
         .then(() => {
             if (notification.redirect_url) {
@@ -27,6 +27,18 @@ function openNotification(notification) {
             closePanel()
         })
         .catch((e) => console.error('Error marking as read:', e))
+}*/
+
+function openNotification(notification) {
+    api.post(`/notifications/${notification.id}/mark-read`)
+        .then(() => {
+            router.push({
+                name: 'rental.show',
+                params: { id: notification.rental_id },
+            })
+            closePanel()
+        })
+        .catch(console.error)
 }
 </script>
 

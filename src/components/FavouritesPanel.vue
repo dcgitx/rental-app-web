@@ -25,7 +25,8 @@ const remove = async (id) => {
             <li v-for="fav in favourites" :key="fav.id"
                 class="cursor-pointer py-3 hover:bg-gray-50 dark:hover:bg-transparent transition-all ease-in-out duration-200 p-1">
 
-                <div class="flex flex-row items-center justify-between gap-2">
+                <RouterLink :to="{ name: 'item.show', params: { slug: fav.rental_item.slug } }"
+                    class="flex flex-row items-center justify-between gap-2">
 
                     <img :src="fav.rental_item.image.src" :alt="fav.rental_item.image.alt"
                         class="size-10 flex-none rounded-md object-fit" />
@@ -44,9 +45,10 @@ const remove = async (id) => {
                             added: {{ $formatDate(fav.created_at, "MMM Do YYYY")
                             }}</div>
                         <button @click="remove(fav.id)"
-                            class="text-sm underline text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">remove</button>
+                            class="text-sm underline text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">remove
+                            favourite</button>
                     </div>
-                </div>
+                </RouterLink>
             </li>
         </ul>
         <div v-else class="text-gray-600 dark:text-gray-400">

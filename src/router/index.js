@@ -181,7 +181,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  //console.log('NAVIGATING TO:', to.fullPath, to.meta)
   if (to.meta.requiresAuth) {
     const redirect = authGuard(to)
     if (redirect) return redirect

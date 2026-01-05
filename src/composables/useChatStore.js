@@ -10,7 +10,6 @@ const state = reactive({
   showList: false,
   hasUnread: false,
 
-  // internals
   _subscribed: new Set(),
   _userSubscribed: false,
   _subscribedExisting: false,
@@ -105,7 +104,6 @@ export function useChatStore() {
 
     const userId = user.value.id
 
-    // Laravel broadcasts this as: App.Models.User.{id}
     const channelName = `private-App.Models.User.${userId}`
     const channel = ably.channels.get(channelName)
 
@@ -132,7 +130,6 @@ export function useChatStore() {
     try {
       const response = await api.get('/conversations')
 
-      // 🔒 normalize API shape
       const conversations = Array.isArray(response.data)
         ? response.data
         : (response.data.data ?? [])
@@ -146,7 +143,6 @@ export function useChatStore() {
           })
         }
 
-        // ✅ this is now Ably-based
         ensureSubscribed(c.id)
       })
 
@@ -183,7 +179,7 @@ export function useChatStore() {
       // make sure we’re listening for incoming messages
       ensureSubscribed(chat.id)
 
-      // if you’re storing per-chat minimized on the object, un-minimize on open
+      // if storing per-chat minimized on the object, un-minimize on open
       if (chat.minimized) chat.minimized = false
 
       // show the window if it’s not already visible
@@ -191,12 +187,11 @@ export function useChatStore() {
         state.openChats.push(chat)
       }
 
-      // ✅ Optimistically mark as read immediately (no waiting)
+      // Optimistically mark as read immediately
       if (chat.unread_count > 0) {
-        chat.unread_count = 0 // instantly clear local unread
+        chat.unread_count = 0
         state.hasUnread = state.chats.some((c) => (c.unread_count || 0) > 0)
 
-        // fire-and-forget backend call (no await)
         markAsRead(chat.id)
       }
 

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import api from '@/lib/api'
 
 export function useConversations() {
