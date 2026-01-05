@@ -12,14 +12,6 @@ import GoogleSignInButton from '@/components/GoogleSignInButton.vue';
 import api from '@/lib/api'
 
 const auth = useAuthStore()
-
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-        default: false,
-    },
-})
-
 const router = useRouter()
 const route = useRoute()
 const email = ref('')
@@ -149,7 +141,7 @@ const signInWithGoogle = () => {
                         </span>
                     </label>
 
-                    <RouterLink v-if="canResetPassword" to="/forgot-password"
+                    <RouterLink to="/forgot-password"
                         class="text-sm text-teal-600 hover:text-teal-500 dark:text-teal-400 underline">
                         {{ $t("Forgot your password?") }}
                     </RouterLink>
