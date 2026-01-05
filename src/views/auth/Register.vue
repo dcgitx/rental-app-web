@@ -1,11 +1,10 @@
 <script setup>
 import { ref, onMounted, computed, nextTick } from "vue";
 import { useImageResizer } from "@/composables/useImageResizer";
-import {
-    ChevronDownIcon,
-    PhotoIcon,
-    UserCircleIcon,
-} from "@heroicons/vue/24/solid";
+import { UserCircleIcon } from "@heroicons/vue/24/solid";
+import { useReferenceDataStore } from "@/stores/referenceData";
+import { useAuthStore } from "@/stores/auth";
+import { useRoute, useRouter } from "vue-router";
 
 import InputLabel from "@/components/InputLabel.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
@@ -15,9 +14,7 @@ import ToggleSwitch from "@/components/ToggleSwitch.vue";
 import DangerButton from "@/components/DangerButton.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
 import InputError from "@/components/InputError.vue";
-import { useReferenceDataStore } from "@/stores/referenceData";
-import { useAuthStore } from "@/stores/auth";
-import { useRoute, useRouter } from "vue-router";
+
 import api from "@/lib/api";
 
 const refStore = useReferenceDataStore();
@@ -110,7 +107,7 @@ const submit = async () => {
 
 const avatarPreview = ref(null)
 
-const { resizeImages, previewImages, resizedFiles } = useImageResizer({
+const { resizeImages } = useImageResizer({
     maxWidth: 400,
     maxHeight: 400,
     quality: 0.8,
@@ -126,6 +123,8 @@ const handleAvatarChange = async (e) => {
     form.avatar = resizedFile;
     avatarPreview.value = preview;
 };
+
+
 </script>
 
 <template>

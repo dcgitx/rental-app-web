@@ -17,17 +17,18 @@ import ItemStarRating from "@/components/ItemStarRating.vue";
 import InputError from "@/components/InputError.vue";
 import FormInfo from "@/components/FormInfo.vue";
 import Datepicker from "@/components/Datepicker.vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { addFavourite, deleteFavourite } from "@/api/favourites";
 import {
     fetchRentalItem,
-    calculateRentalPrice,
-    requestRental,
+    calculateRentalPrice
 } from '@/api/rentalItems';
 import LoadingState from "@/components/LoadingState.vue";
+import { useCheckoutStore } from "@/stores/checkout";
 
 const auth = useAuthStore();
+const checkoutStore = useCheckoutStore();
 const user = computed(() => auth.user);
 const isFavourite = computed(() => favouriteId.value !== null)
 const isTogglingFavourite = ref(false)
@@ -41,6 +42,9 @@ const discountCode = ref("");
 const isCalculatingPrice = ref(false)
 const calculatedPrice = ref(null);
 const priceError = ref(null);
+const router = useRouter();
+
+
 const form = ref({
     start_date: null,
     end_date: null,
@@ -53,6 +57,29 @@ const form = ref({
     vat_rate: null,
     total_price: null,
 });
+
+const submit = () => {
+    form.value.start_date = selectedDates.value.start
+    form.value.end_date = selectedDates.value.end
+    form.value.total_days = calculatedPrice.value.rental_days
+    form.value.discount_code = discountCode.value
+    form.value.rental_price = calculatedPrice.value.rental_price
+    form.value.platform_fee = calculatedPrice.value.platform_fee
+    form.value.lister_fee = calculatedPrice.value.lister_fee
+    form.value.vat = calculatedPrice.value.vat
+    form.value.vat_rate = calculatedPrice.value.vat_rate
+    form.value.total_price = calculatedPrice.value.total
+
+    checkoutStore.payload = {
+        rental_item_id: rentalItem.value.id,
+        rental_item_title: rentalItem.value.title,
+        item_owner_id: rentalItem.value.item_owner_id,
+        ...form.value,
+    }
+
+    router.push({ name: 'rental-checkout' })
+}
+
 
 const loadItem = async () => {
     try {
@@ -140,10 +167,7 @@ watch(selectedDates, (range) => {
     }
 })
 
-/*TODO: Add props:
-Reviews
-Questions & replies
-*/
+
 
 const reviews = {
     average: 4,

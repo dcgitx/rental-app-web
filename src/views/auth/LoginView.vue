@@ -22,17 +22,14 @@ defineProps({
 
 const router = useRouter()
 const route = useRoute()
-
 const email = ref('')
 const password = ref('')
 const remember = ref(false)
-
+const loading = ref(false)
 const errors = ref({
     email: null,
     password: null,
 })
-
-const loading = ref(false)
 
 const submit = async () => {
     loading.value = true

@@ -123,6 +123,22 @@ const router = createRouter({
       },
     },
     {
+      path: '/checkout/rental',
+      name: 'rental-checkout',
+      component: () => import('@/views/rentals/RentalCheckout.vue'),
+      meta: {
+        title: 'Rental Checkout',
+      },
+    },
+    {
+      path: '/rental-request/submitted',
+      name: 'rental-request-submitted',
+      component: () => import('@/views/rentals/RentalRequestSubmitted.vue'),
+      meta: {
+        title: 'Rental Checkout',
+      },
+    },
+    {
       path: '/lister/rental-items/create',
       name: 'lister.rentalItem.create',
       component: () => import('../views/rentalItems/lister/Create.vue'),

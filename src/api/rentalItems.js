@@ -21,5 +21,5 @@ export function calculateRentalPrice(payload) {
 }
 
 export function requestRental(payload) {
-  return api.post('/rental-requests', payload)
+  return api.post('/rental/request', payload)
 }
