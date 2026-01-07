@@ -15,9 +15,9 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
 import TextInput from "@/components/TextInput.vue";
 import ToggleSwitch from "@/components/ToggleSwitch.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
+import LoadingState from "@/components/LoadingState.vue";
 import { UserCircleIcon } from "@heroicons/vue/24/solid";
 
-import LoadingState from "@/components/LoadingState.vue";
 
 
 const props = defineProps({
