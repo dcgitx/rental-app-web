@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import { startIdentityVerification } from "@/api/stripe";
+import { createConnectedAccount, startIdentityVerification } from "@/api/stripe";
 import { useVisibilityRefresh } from "@/composables/useVisibilityRefresh";
 import { useAuthStore } from "@/stores/auth";
 import DeleteUserForm from "./partials/DeleteUserForm.vue";
@@ -32,8 +32,15 @@ const createAddress = async () => {
     router.push({ name: 'address/create' });
 };
 
-const createConnectedAccount = () => {
-    console.log("creating connected account");
+const createStripeConnectedAccount = async () => {
+    redirecting.value = true
+    try {
+        const { data } = await createConnectedAccount();
+        window.open(data.url, "_blank");
+        redirecting.value = false
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 useVisibilityRefresh(() => auth.fetchUser());
@@ -55,7 +62,7 @@ useVisibilityRefresh(() => auth.fetchUser());
             class="flex flex-col items-center justify-start gap-2 max-w-2xl w-full mt-6 px-4 pb-4 bg-white dark:bg-inherit shadow-lg sm:rounded-lg border h-full">
             <FormWarning class="w-full">{{
                 $t("Actions required to complete your profile.")
-                }}</FormWarning>
+            }}</FormWarning>
 
             <!--identification-->
             <div v-if="!user.is_identified" class="dark:bg-inherit rounded-lg w-full flex justify-start gap-2 mt-2">
@@ -81,7 +88,7 @@ useVisibilityRefresh(() => auth.fetchUser());
 
             <!--connect account-->
             <div v-if="!user.stripe_account_id" class="dark:bg-inherit rounded-lg w-full flex justify-start gap-2">
-                <PrimaryButton @click="createConnectedAccount" :disabled="!user.user_address_id"
+                <PrimaryButton @click="createStripeConnectedAccount" :disabled="!user.user_address_id"
                     class="min-w-56 sm:text-nowrap">{{
                         $t("Create Payment Account")
                     }}</PrimaryButton>
