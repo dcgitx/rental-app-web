@@ -72,6 +72,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/profile/edit.vue'),
+      meta: {
+        title: 'Profile',
+      },
+    },
+    {
       path: '/forgot-password',
       name: 'forgot-password',
       component: () => import('@/views/auth/ForgotPassword.vue'),
@@ -87,6 +95,22 @@ const router = createRouter({
       component: () => import('../views/auth/Register.vue'),
       meta: {
         title: 'Sign Up',
+      },
+    },
+    {
+      path: '/addresses',
+      name: 'addresses',
+      component: () => import('../views/user/Addresses.vue'),
+      meta: {
+        title: 'Addresses',
+      },
+    },
+    {
+      path: '/address/create',
+      name: 'address/create',
+      component: () => import('../views/user/CreateAddress.vue'),
+      meta: {
+        title: 'Create Address',
       },
     },
     {

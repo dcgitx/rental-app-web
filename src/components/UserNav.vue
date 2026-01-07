@@ -7,7 +7,6 @@ import { useChatStore } from "@/composables/useChatStore";
 import { usePanelStore } from "@/composables/usePanelStore";
 import { useMessaging } from "@/composables/useMessaging";
 import { useUserNotifications } from "@/composables/useUserNotifications";
-
 import {
     BellIcon,
     ChatBubbleLeftIcon,
@@ -64,13 +63,13 @@ function openNotifications() {
 
                     <RouterLink v-if="!user.can_list && user.can_rent"
                         class="px-4 py-2 text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:text-teal-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400"
-                        to="/profile/edit">
+                        to="/profile">
                         {{ $t("Complete Your Profile to begin listing") }}
                     </RouterLink>
 
                     <RouterLink v-if="!user.can_rent && !user.can_list"
                         class="px-4 py-2 text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:text-teal-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400"
-                        to="/profile/edit">
+                        to="/profile">
                         {{ $t("Complete Your Profile to begin listing and renting!") }}
                     </RouterLink>
 
@@ -87,7 +86,7 @@ function openNotifications() {
                     </RouterLink>
                 </nav>
 
-                <!-- Right Section: Actions -->
+                <!-- Right Section: Slide outs -->
                 <div class="flex items-center gap-1">
 
                     <!-- Favourites -->

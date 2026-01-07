@@ -1,7 +1,11 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
-import { useReferenceDataStore } from '@/stores/referenceData'
+import { useReferenceDataStore } from '@/stores/referenceData';
+import { XMarkIcon } from "@heroicons/vue/24/solid";
+import { useUserDataStore } from "@/stores/userData";
+import { useAuthStore } from "@/stores/auth";
+import { storeRentalItem } from "@/api/rentalItems";
 import DangerButton from "@/components/DangerButton.vue";
 import InputError from "@/components/InputError.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
@@ -11,10 +15,6 @@ import PriceInput from "@/components/PriceInput.vue";
 import SingleSelectDropdown from "@/components/SingleSelectDropdown.vue";
 import MultipleFileUpload from "@/components/MultipleFileUpload.vue";
 import InputLabel from "@/components/InputLabel.vue";
-import { XMarkIcon } from "@heroicons/vue/24/solid";
-import { useUserDataStore } from "@/stores/userData";
-import { useAuthStore } from "@/stores/auth";
-import { storeRentalItem } from "@/api/rentalItems";
 
 const refStore = useReferenceDataStore();
 const userData = useUserDataStore();

@@ -103,10 +103,10 @@
                         </template>
 
                         <template #content class="z-50">
-                            <DropdownLink to="{ name: 'profile.edit' }">
+                            <DropdownLink to="/profile">
                                 {{ $t("Profile") }}
                             </DropdownLink>
-                            <DropdownLink to="{ name: 'addresses.index' }">
+                            <DropdownLink to="/addresses">
                                 {{ "My Addresses" }}
                             </DropdownLink>
                             <DropdownLink @click="logout">{{ $t("Log Out") }}
