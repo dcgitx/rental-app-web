@@ -3,6 +3,9 @@ import { ref, watch, computed, reactive } from "vue";
 import { CurrencyEuroIcon } from "@heroicons/vue/24/outline";
 import { useReferenceDataStore } from "@/stores/referenceData";
 import { useImageResizer } from "@/composables/useImageResizer";
+import { updateProfile } from "@/api/profile";
+import { showAccountDashboard } from "@/api/stripe";
+import { useAuthStore } from "@/stores/auth";
 
 import FileUpload from "@/components/FileUpload.vue";
 import FormInfo from "@/components/FormInfo.vue";
@@ -13,9 +16,9 @@ import TextInput from "@/components/TextInput.vue";
 import ToggleSwitch from "@/components/ToggleSwitch.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
 import { UserCircleIcon } from "@heroicons/vue/24/solid";
-import { updateProfile } from "@/api/profile";
-import { useAuthStore } from "@/stores/auth";
+
 import LoadingState from "@/components/LoadingState.vue";
+
 
 const props = defineProps({
     user: Object
@@ -78,6 +81,17 @@ const handleAvatarChange = async (e) => {
     avatarPreview.value = preview;
 };
 
+const showConnectedAccount = async () => {
+    processing.value = true
+    try {
+        const { data } = await showAccountDashboard();
+        window.open(data.url, "_blank");
+        processing.value = false
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const submit = async () => {
 
     processing.value = true;
@@ -124,6 +138,7 @@ const submit = async () => {
 
         <header class="flex flex-col justify-between">
             <div class="flex flex-col items-end">
+
                 <!--Avatar Form-->
                 <div class="w-full">
                     <div class="flex flex-col items-start justify-start pb-12">
@@ -157,14 +172,13 @@ const submit = async () => {
                         </div>
 
                     </div>
+
                     <!--stripe dashboard-->
-                    <div v-if="user.stripe_account_id" class="flex place-self-end">
-                        <a as="button" href="route('stripeAccount/show')" target="_blank">
-                            <PrimaryButton class="bg-orange-500 hover:bg-orange-600">
-                                <CurrencyEuroIcon class="size-6 mr-1" /> View Stripe Dashboard (opens in new
-                                tab)
-                            </PrimaryButton>
-                        </a>
+                    <div v-if="user.stripe_account_id" class="flex place-self-end -mt-6">
+                        <PrimaryButton @click="showConnectedAccount" class="bg-orange-500 hover:bg-orange-600">
+                            <CurrencyEuroIcon class="size-6 mr-1" /> View Stripe Dashboard (opens in new
+                            tab)
+                        </PrimaryButton>
                     </div>
                 </div>
 
@@ -191,6 +205,7 @@ const submit = async () => {
                 <TextInput id="username" v-model="form.username" autocomplete="off" :error="formErrors.username?.[0]"
                     :class="{ 'mb-12': formErrors.username }" />
             </div>
+
             <!-- name and surname-->
             <div class="flex flex-row gap-4">
                 <!--name-->
@@ -263,14 +278,6 @@ const submit = async () => {
                         }}
                     </RouterLink>
                 </p>
-
-                <!--<div v-show="status === 'verification-link-sent'" class="mt-2 font-medium text-sm text-green-600">
-                    {{
-                        $t(
-                            "A new verification link has been sent to your email address.",
-                        )
-                    }}
-                </div>-->
             </div>
 
             <div class="flex items-center gap-4">

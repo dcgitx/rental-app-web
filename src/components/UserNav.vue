@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, watch, computed } from "vue";
+import { watch, computed } from "vue";
 import { RouterLink } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
@@ -40,9 +40,7 @@ watch(
 )
 
 function openNotifications() {
-    console.log("before", notifications.hasUnread.value);
     notifications.markAsRead();
-    console.log("after", notifications.hasUnread.value);
     togglePanel("notifications");
 }
 </script>

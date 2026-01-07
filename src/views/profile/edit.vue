@@ -68,7 +68,7 @@ useVisibilityRefresh(() => auth.fetchUser());
     <div v-if="!redirecting" class="flex flex-col justify-center items-center w-full">
 
         <!-- profile requirements-->
-        <div v-if="!user.is_identified || !user.can_list"
+        <div v-if="!user.is_identified || !user.can_list || !user.can_rent"
             class="flex flex-col items-center justify-start gap-2 max-w-2xl w-full mt-6 px-4 pb-4 bg-white dark:bg-inherit shadow-lg sm:rounded-lg border h-full">
             <FormWarning class="w-full">{{
                 $t("Actions required to complete your profile.")
@@ -126,7 +126,5 @@ useVisibilityRefresh(() => auth.fetchUser());
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
