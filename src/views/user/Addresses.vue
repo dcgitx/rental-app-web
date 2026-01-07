@@ -27,8 +27,8 @@ const disabledAddresses = [];
     <!--enabled addresses-->
     <div class="flex w-full justify-center">
         <div v-if="addresses.length" class="w-1/2 pt-4 flex flex-col items-center justify-center">
-            <RouterLink to="/address/create" class="pb-4 w-full">
-                <PrimaryButton class="w-1/2">Create New</PrimaryButton>
+            <RouterLink to="/address/create" class="pb-4 w-full flex justify-start">
+                <PrimaryButton class="w-1/4">Create New</PrimaryButton>
             </RouterLink>
 
             <h1 class="text-xl font-semibold w-full text-center pb-2">

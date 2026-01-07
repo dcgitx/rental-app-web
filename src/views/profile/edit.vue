@@ -33,13 +33,23 @@ const createAddress = async () => {
 };
 
 const createStripeConnectedAccount = async () => {
-    redirecting.value = true
+    redirecting.value = true;
+
+    const popup = window.open("", "_blank");
+    if (!popup) {
+        redirecting.value = false;
+        alert("Please allow popups to continue to Stripe.");
+        return;
+    }
+
     try {
         const { data } = await createConnectedAccount();
-        window.open(data.url, "_blank");
-        redirecting.value = false
+        popup.location.href = data.url;
     } catch (error) {
+        popup.close();
         console.error(error);
+    } finally {
+        redirecting.value = false;
     }
 };
 
@@ -62,7 +72,7 @@ useVisibilityRefresh(() => auth.fetchUser());
             class="flex flex-col items-center justify-start gap-2 max-w-2xl w-full mt-6 px-4 pb-4 bg-white dark:bg-inherit shadow-lg sm:rounded-lg border h-full">
             <FormWarning class="w-full">{{
                 $t("Actions required to complete your profile.")
-            }}</FormWarning>
+                }}</FormWarning>
 
             <!--identification-->
             <div v-if="!user.is_identified" class="dark:bg-inherit rounded-lg w-full flex justify-start gap-2 mt-2">

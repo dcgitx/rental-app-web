@@ -201,6 +201,12 @@ const router = createRouter({
       name: 'rental-items',
       component: () => import('@/views/Placeholder.vue'),
     },
+    {
+      path: '/external/stripe/completed',
+      name: 'stripe.connected',
+      component: () => import('@/views/StripeCompletedView.vue'),
+      meta: { public: true, headerMode: 'minimal' },
+    },
   ],
 })
 

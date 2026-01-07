@@ -66,6 +66,7 @@ watch(selectedAddress, (newAddress) => {
 const submit = async () => {
     processing.value = true;
     formErrors.value = {};
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     try {
         await storeAddress({

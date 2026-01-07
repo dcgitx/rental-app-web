@@ -9,11 +9,12 @@
     import { useLocaleStore } from "@/stores/localeStore";
     import Dropdown from './Dropdown.vue';
     import DropdownLink from './DropdownLink.vue';
-    import { useRouter } from 'vue-router';
+    import { useRoute, useRouter } from 'vue-router';
     import UserNav from './UserNav.vue';
 
     const auth = useAuthStore()
     const router = useRouter()
+    const route = useRoute();
 
     const logout = async () => {
         auth.logout()
@@ -65,7 +66,8 @@
 
         <!-- NAVIGATION -->
         <nav class="w-full">
-            <div class="flex flex-col items-center justify-center gap-4 sm:pt-6">
+            <div v-show="route.meta.headerMode !== 'minimal'"
+                class="flex flex-col items-center justify-center gap-4 sm:pt-6">
 
                 <!-- Guest Navigation -->
                 <div v-if="!auth.isAuthenticated" class="flex w-full flex-col items-center justify-center text-black">
@@ -151,7 +153,6 @@
             </div>
         </nav>
     </header>
-    <UserNav v-if="auth.isAuthenticated" />
-
+    <UserNav v-if="auth.isAuthenticated && route.meta.headerMode !== 'minimal'" />
 </template>
 
